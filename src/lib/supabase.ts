@@ -1,6 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// This "Mock" satisfies the app logic without needing a real database
+export const supabase = {
+  auth: { 
+    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+  },
+  from: () => ({
+    select: () => ({ data: [], error: null, single: () => ({ data: null, error: null }) }),
+    insert: () => ({ data: null, error: null }),
+    update: () => ({ data: null, error: null }),
+    upsert: () => ({ data: null, error: null })
+  })
+};
